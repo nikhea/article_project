@@ -73,6 +73,31 @@ app.post('/articles/add', (req, res) => {
     
 })
 
+//load edit form
+app.get('/articles/:id/edit', (req, res) => {
+    Articles.findById(req.params.id, function(err, editArticles){
+  res.render('edit', {article:editArticles}) 
+    })
+    
+})
+//update
+app.post('/articles/:id/edit', function(req, res){
+  let article = {};
+  article.title = req.body.title
+  article.author = req.body.author
+  article.body  = req.body.body
+
+  let query = { _id: req.params.id}
+ Articles.update(query, article, function(err){
+     if (err) {
+         console.log(err)
+     } else {
+         res.redirect('/')
+     }
+ })
+ });
+ 
+
 app.listen(PORT, () => {
     console.log(`server has started on PORT ${PORT}`)
 })
