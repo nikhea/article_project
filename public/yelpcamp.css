@@ -1,0 +1,34 @@
+*:focus{outline: none}
+.fortune{
+	width: 30%;
+	margin: 25px auto;
+}
+.h1news{
+	text-align: center;
+}
+.btn-primary{
+	background-color:blue !important;
+}
+.btn-primary:hover{
+	background-color:red !important;
+
+}
+.h4camp{
+	color: rgb(12, 80, 15) !important
+}
+.h4camp:hover{
+	color: rgb(182, 118, 118) !important;
+
+}
+.imo:focus{
+	outline: none !important; 
+}
+.under{
+	color:rgba(87, 24, 63, 0.377);
+
+}
+.under:hover{
+	color: blue;
+	font-size: 100px;
+} 
+

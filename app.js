@@ -3,6 +3,7 @@ const express = require('express')
      mongoose = require('mongoose')
      path     =  require('path')
      Articles = require("./models/articles")
+     bodyparser = require('body-parser')
      app     = express()
    
 
@@ -22,29 +23,56 @@ app.set('views', path.join(__dirname, "views"))
 app.set ("view engine", "ejs")
 
 
+
+app.use(bodyparser.urlencoded({extended: false}))
+app.use(bodyparser.json())
+app.set(express.static(path.join(__dirname, 'public')))
+
+//Home Route
 app.get('/', (req, res) => {
-   
-     res.render('index', {
-         title: "Articles",
-         articles: articles
+    Articles.find({},function(err, articles){
+        if (err) {
+            console.log(err)
+        }
+        else{
+           res.render('index', {
+               title: "Articles",
+               articles: articles
+           }) 
+        }
+    })
+    }) 
+// Show more detail about a given articles
+app.get("/article/:id", function(req, res){
+      Articles.findById(req.params.id, function(err, articles){
+          if (err) {
+              console.log(err)
+          } else {
+              res.render("articles", {article:articles})
+          }
+      })
+})
+app.get('/articles/add', (req, res) => {
+    res.render('add', {
+            title: "Add Articles",
      })
 })
-
-app.get('/articles/add', (req, res) => {
- Articles.find({},function(err, articles){
-     if (err) {
-         console.log(err)
-     }
-     else{
-        res.render('add', {
-            title: "add artices",
-            articles: articles
-        }) 
-     }
-   
- })
- 
+// Articule Form  route
+app.post('/articles/add', (req, res) => {
+     let article = new Articles()
+     article.title = req.body.title
+     article.author = req.body.author
+     article.body  = req.body.body
+    article.save(function(err){
+        if (err) {
+            console.log(err)
+        } else {
+            res.redirect('/')
+        }
+    })
+    
 })
+
 app.listen(PORT, () => {
     console.log(`server has started on PORT ${PORT}`)
 })

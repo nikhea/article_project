@@ -1,9 +1,15 @@
 <% include layout %>
-<h1>hello wordl</h1>
+<link rel="stylesheet" type="text/css" href="bootstrap.css">
+<link rel="stylesheet" type="text/css"  href="yelpcamp.css"/>
+
 <%= title %>
 <% articles.forEach(function(article){ %>
-    
-   <li> <%= article.title %></li>
+    <ul class="list-group">
+        <li class="list-group-item"> 
+                <a href="/article/<%=article._id %>"> <%= article.title %> </a>
+        </li>
+     
 
+    </ul>
 
 <%})%>
