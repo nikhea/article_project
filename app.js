@@ -21,23 +21,7 @@ db.once("open", function(){
 app.set('views', path.join(__dirname, "views"))
 app.set ("view engine", "ejs")
 
-let articles = [
-    {
-        id: 1,
-        title: 'fortune',
-        body: 'this is article one'
-    },
-    {
-        id: 2,
-        title: 'fortune',
-        body: 'this is article one'
-    },
-    {
-        id: 3,
-        title: 'fortune',
-        body: 'this is article one'
-    }
-]
+
 app.get('/', (req, res) => {
    
      res.render('index', {
@@ -47,10 +31,19 @@ app.get('/', (req, res) => {
 })
 
 app.get('/articles/add', (req, res) => {
-    res.render('add', {
-        title: "add artices",
-        articles: articles
-    }) 
+ Articles.find({},function(err, articles){
+     if (err) {
+         console.log(err)
+     }
+     else{
+        res.render('add', {
+            title: "add artices",
+            articles: articles
+        }) 
+     }
+   
+ })
+ 
 })
 app.listen(PORT, () => {
     console.log(`server has started on PORT ${PORT}`)
