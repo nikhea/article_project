@@ -1,3 +1,9 @@
 <% include layout %>
 <h1>hello wordl</h1>
 <%= title %>
+<% articles.forEach(function(article){ %>
+    
+   <li> <%= article.title %></li>
+
+
+<%})%>

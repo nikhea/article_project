@@ -1,4 +1,8 @@
 <% include layout %>
     <h1> <%= title %> </h1>
-</body>
-</html>
+    <% articles.forEach(function(article){ %>
+    
+        <li> <%= article.title %></li>
+     
+     
+     <%})%>
