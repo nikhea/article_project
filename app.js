@@ -1,9 +1,22 @@
 const express = require('express')
      ejs      = require('ejs')
+     mongoose = require('mongoose')
      path     =  require('path')
+     Articles = require("./models/articles")
      app     = express()
-     PORT = process.env.PORT || 4000
+   
 
+     PORT = process.env.PORT || 4000
+     mongoose.connect('mongodb://localhost/nodeartics')
+     let db = mongoose.connection;
+//check for DB error
+db.on("error", function(error){
+   console.log(error)
+}) 
+//check for DB error
+db.once("open", function(){
+    console.log("Connected to local MONGODataBase" )
+ }) 
 //load view Engine 
 app.set('views', path.join(__dirname, "views"))
 app.set ("view engine", "ejs")
