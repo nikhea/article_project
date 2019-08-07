@@ -14,7 +14,13 @@ let articlesSchema = mongoose.Schema({
     body:{
         type: String,
         require: true
-    }
+    },
+    comments: [
+           {
+               type:mongoose.Schema.Types.ObjectId,
+               ref: "Comment"
+           }
+    ]
 })
 
 let Articles = mongoose.model("Articles", articlesSchema)

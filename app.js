@@ -3,12 +3,15 @@ const express = require('express')
      mongoose = require('mongoose')
      path     =  require('path')
      Articles = require("./models/articles")
+     Comments = require("./models/comment")
      bodyparser = require('body-parser')
+     methodOverride = require('method-override')
+     SeedDB         = require('./seed')
      app     = express()
    
-
-     PORT = process.env.PORT || 4000
-     mongoose.connect('mongodb://localhost/nodeartics')
+SeedDB()
+     PORT = process.env.PORT || 5000
+     mongoose.connect('mongodb://localhost/nodeartics_commits')
      let db = mongoose.connection;
 //check for DB error
 db.on("error", function(error){
@@ -26,6 +29,7 @@ app.set ("view engine", "ejs")
 
 app.use(bodyparser.urlencoded({extended: false}))
 app.use(bodyparser.json())
+app.use(methodOverride("_method"))
 app.set(express.static(path.join(__dirname, 'public')))
 
 //Home Route
@@ -44,13 +48,14 @@ app.get('/', (req, res) => {
     }) 
 // Show more detail about a given articles
 app.get("/article/:id", function(req, res){
-      Articles.findById(req.params.id, function(err, articles){
+      Articles.findById(req.params.id).populate('comments').exec(function(err, articles){
           if (err) {
               console.log(err)
           } else {
+              console.log(articles)
               res.render("articles", {article:articles})
           }
-      })
+       })
 })
 app.get('/articles/add', (req, res) => {
     res.render('add', {
@@ -96,6 +101,57 @@ app.post('/articles/:id/edit', function(req, res){
      }
  })
  });
+
+ app.delete('/articles/:id', function(req, res){
+   Articles.findByIdAndRemove(req.params.id, function(err){
+       if (err) {
+           res.send('not deledtion')
+       } else {
+           res.redirect('/')
+       }
+   })
+ })
+
+
+
+ app.get('/article/:id/comments/new', function(req, res){
+    Articles.findById(req.params.id, function(err, articles){
+           if (err) {
+               console.log(err)
+           } else {
+            res.render("postnew", {article:articles})
+           }
+    })
+  
+           
+ })
+
+
+ app.post('/article/:id/comments', function(req, res){
+     Articles.findById(req.params.id, function(err, articles){
+         if (err) {
+             console.log(err)
+         } else {
+            let article = {};
+            article.author = req.body.author
+            article.content  = req.body.content
+          
+             Comments.create(article,function(err, comment){
+                 if (err) {
+                     console.log(err)
+                 } else {
+                    
+                     console.log(req.body.comment)
+                     articles.comments.push(comment)
+                   articles.save()
+                     res.redirect('/article/' + articles._id)
+                 }
+             })
+         }
+     })
+      
+})
+
  
 
 app.listen(PORT, () => {

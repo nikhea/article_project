@@ -9,3 +9,18 @@
 <p> <%=article.body %></p>
 <hr>
 <a href="/articles/<%=article._id%>/edit" class="btn btn-default">EDIT</a>
+
+
+<a href="/article/<%=article._id %>/comments/new"> add new comment</a>
+<% article.comments.forEach(function(comment){ %>
+          <li>
+              <p>
+                  <strong> <%=comment.author%> </strong>
+            - <%=comment.content%> 
+           </p>
+        </li>
+<% }) %>
+
+<form id="delete-form" action="/articles/<%=article._id%>?_method=DELETE" method="POST">
+    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+</form>
