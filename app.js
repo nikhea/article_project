@@ -11,7 +11,8 @@ const express = require('express')
    
 SeedDB()
      PORT = process.env.PORT || 5000
-     mongoose.connect('mongodb://localhost/nodeartics_commits')
+     mongoose.connect('mongodb+srv://testuser:testuserpassword@cluster0-yxil4.mongodb.net/test?retryWrites=true&w=majority')
+    //  mongoose.connect('mongodb://localhost/nodeartics_commits')
      let db = mongoose.connection;
 //check for DB error
 db.on("error", function(error){
@@ -30,7 +31,9 @@ app.set ("view engine", "ejs")
 app.use(bodyparser.urlencoded({extended: false}))
 app.use(bodyparser.json())
 app.use(methodOverride("_method"))
-app.set(express.static(path.join(__dirname, 'public')))
+// app.set(express.static(path.join(__dirname, 'public')))
+// app.use(express.static('public'))
+app.use('/static', express.static('public'))
 
 //Home Route
 app.get('/', (req, res) => {
@@ -135,7 +138,6 @@ app.post('/articles/:id/edit', function(req, res){
             let article = {};
             article.author = req.body.author
             article.content  = req.body.content
-          
              Comments.create(article,function(err, comment){
                  if (err) {
                      console.log(err)
